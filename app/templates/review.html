@@ -1,0 +1,299 @@
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for category, message in messages %}
+      <li class="{{ category }}">{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+{% extends "base.html" %}
+{% block title %} Home Page {% endblock %}
+
+{% block content %} 
+<!-- <h3>This is the review page</h3>
+<p>Add a new review:</p> -->
+<head>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+<style>
+  html, body {
+  min-height: 100%;
+  }
+  body, div, form, input, select { 
+  padding: 0;
+  margin: 0;
+  outline: none;
+  font-family: Roboto, Arial, sans-serif;
+  font-size: 14px;
+  color: #252222;
+  line-height: 22px;
+  }
+  h1, h4 {
+  margin: 15px 0 4px;
+  font-weight: 400;
+  }
+  h4 {
+  margin: 20px 0 4px;
+  font-weight: 400;
+  }
+  span {
+  color: red;
+  }
+  .small {
+  font-size: 10px;
+  line-height: 18px;
+  }
+  .newReview {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: inherit;
+  padding: 3px;
+  }
+  .input-form {
+  width: 40%;
+  padding: 20px;
+  background: #fff;
+  box-shadow: 0 2px 5px #ccc; 
+  }
+  input {
+  width: calc(100% - 10px);
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  vertical-align: middle;
+  }
+  input:hover, textarea:hover, select:hover {
+  outline: none;
+  border: 1px solid #095484;
+  background: #e6eef7;
+  }
+  .title-block select, .title-block input {
+  margin-bottom: 10px;
+  }
+  select {
+  padding: 7px 0;
+  border-radius: 3px;
+  border: 1px solid #ccc;
+  background: transparent;
+  }
+  select, table {
+  width: 100%;
+  }
+  option {
+  background: #fff;
+  }
+  th, td {
+  width: 18%;
+  padding: 15px 0;
+  border-bottom: 1px solid #ccc;
+  text-align: center;
+  vertical-align: unset;
+  line-height: 18px;
+  font-weight: 400;
+  word-break: break-all;
+  }
+  textarea {
+  width: calc(100% - 6px);
+  }
+  .btn-block {
+  margin-top: 20px;
+  text-align: center;
+  }
+  button {
+  width: 150px;
+  padding: 10px;
+  border: none;
+  -webkit-border-radius: 5px; 
+  -moz-border-radius: 5px; 
+  border-radius: 5px; 
+  background-color: #095484;
+  font-size: 16px;
+  color: #fff;
+  cursor: pointer;
+  }
+  button:hover {
+  background-color: #0666a3;
+  }
+  @media (min-width: 568px) {
+  .title-block {
+  display: flex;
+  justify-content: space-between;
+  }
+  .title-block select {
+  width: 50%;
+  margin-bottom: 0;
+  }
+  .title-block input {
+  width: 50%;
+  margin-bottom: 0;
+  }
+  .txt-center {
+    text-align: center;
+}
+.hide {
+    display: none;
+}
+
+.clear {
+    float: none;
+    clear: both;
+}
+
+.rating {
+    width: 90px;
+    unicode-bidi: bidi-override;
+    direction: rtl;
+    text-align: center;
+    position: relative;
+}
+
+.rating > label {
+    float: right;
+    display: inline;
+    padding: 0;
+    margin: 0;
+    position: relative;
+    width: 1.1em;
+    cursor: pointer;
+    color: #000;
+}
+
+.rating > label:hover,
+.rating > label:hover ~ label,
+.rating > input.radio-btn:checked ~ label {
+    color: transparent;
+}
+
+.rating > label:hover:before,
+.rating > label:hover ~ label:before,
+/* .rating > input.radio-btn:checked ~ label:before, */
+.rating > input.radio-btn:checked ~ label:before {
+    content: "\2605";
+    position: absolute;
+    left: 0;
+    color: #FFD700;
+}
+  th, td {
+  word-break: keep-all;
+  }
+  }
+
+</style>
+</head>
+<body>
+<div class="newReview">
+  <form class="input-form" action="/review" method="post">
+    <h2>Add a new review</h1>
+    <h4>Course ID<span>*</span></h4>
+    <input type="text" name="courseid" placeholder="e.g CS411"/>
+    <h4>Year<span>*</span></h4>
+    <select  name="reviewStanding">
+      <option value=""></option>
+      <option value="Freshman">Freshman</option>
+      <option value="Sophomore">Sophomore</option>
+      <option value="Junior">Junior</option>
+      <option value="Senior">Senior</option>
+      <option value="Master">Master</option>
+      <option value="PhD">PhD</option>
+    </select>
+    <h4>Course Term<span>*</span></h4>
+    <div class="title-block">
+      <select class="name" name ="CourseTerm">
+        <option value=""></option>
+        <option value="Sp">Spring</option>
+        <option value="Fa">Fall</option>
+        <option value="Su">Summer</option>
+      </select>
+      <select class="name" id="ddlYears" name="Year">
+        <option value=""></option>
+      </select>
+        <script type="text/javascript">
+          window.onload = function () {
+              //Reference the DropDownList.
+              var ddlYears = document.getElementById("ddlYears");
+      
+              //Determine the Current Year.
+              var currentYear = (new Date()).getFullYear();
+      
+              //Loop and add the Year values to DropDownList.
+              for (var i = 1980; i <= currentYear; i++) {
+                  var option = document.createElement("OPTION");
+                  option.innerHTML = i;
+                  option.value = i;
+                  ddlYears.appendChild(option);
+              }
+          };
+        </script>
+      <!-- <input class="name" type="text" name="name" placeholder="First" />
+      <input class="name" type="text" name="name" placeholder="Last" /> -->
+    </div>
+    <h4>Grade obtained in the above course</h4>
+    <input type="text" name="grade" />
+    <!-- <h4>Professor Name</h4><span>*</span></h4>
+    <div class="title-block">
+     <input class="name" type="text" name="firstName" placeholder="First" />
+     <input class="name" type="text" name="lastName" placeholder="Last" />
+    </div> -->
+    <h4>Difficulty<span>*</span></h4>
+    <div class="rating" name="difficulty">
+      <input id="star5_d" name="stard" type="radio" value="5" class="radio-btn hide" />
+      <label for="star5_d">☆</label>
+      <input id="star4_d" name="stard" type="radio" value="4" class="radio-btn hide" />
+      <label for="star4_d">☆</label>
+      <input id="star3_d" name="stard" type="radio" value="3" class="radio-btn hide" />
+      <label for="star3_d">☆</label>
+      <input id="star2_d" name="stard" type="radio" value="2" class="radio-btn hide" />
+      <label for="star2_d">☆</label>
+      <input id="star1_d" name="stard" type="radio" value="1" class="radio-btn hide" />
+      <label for="star1_d">☆</label>
+      <div class="clear"></div>
+  </div>
+    <h4>Usefulness<span>*</span></h4>
+    <div class="rating" name="usefulness">
+      <input id="star5_u" name="staru" type="radio" value="5" class="radio-btn hide" />
+      <label for="star5_u">☆</label>
+      <input id="star4_u" name="staru" type="radio" value="4" class="radio-btn hide" />
+      <label for="star4_u">☆</label>
+      <input id="star3_u" name="staru" type="radio" value="3" class="radio-btn hide" />
+      <label for="star3_u">☆</label>
+      <input id="star2_u" name="staru" type="radio" value="2" class="radio-btn hide" />
+      <label for="star_u">☆</label>
+      <input id="star1_u" name="staru" type="radio" value="1" class="radio-btn hide" />
+      <label for="star1_u">☆</label>
+      <div class="clear"></div>
+  </div>
+    <h4>Professor Rating<span>*</span></h4>
+          <div class="rating" name="profRating">
+              <input id="star5_p" name="starp" type="radio" value="5" class="radio-btn hide" />
+              <label for="star5_p">☆</label>
+              <input id="star4_p" name="starp" type="radio" value="4" class="radio-btn hide" />
+              <label for="star4_p">☆</label>
+              <input id="star3_p" name="starp" type="radio" value="3" class="radio-btn hide" />
+              <label for="star3_p">☆</label>
+              <input id="star2_p" name="starp" type="radio" value="2" class="radio-btn hide" />
+              <label for="star2_p">☆</label>
+              <input id="star1_p" name="starp" type="radio" value="1" class="radio-btn hide" />
+              <label for="star1_p">☆</label>
+              <div class="clear"></div>
+          </div>
+    <h4>Average hours spent</h4>
+    <input type="number" name="avgHours" />
+    <h4>Maximum hours spent</h4>
+    <input type="number" name="maxHours"/>
+    <h4>Comments about the Professor</h4>
+    <textarea rows="5" name="profComments"></textarea>
+    <h4>Comments about the Course</h4>
+    <textarea rows="5" name="courseComments"></textarea>  
+    <div class="btn-block">
+      <button type="submit" href="/">Add Review</button>
+    </div>
+  </form>
+</div>
+</body> -->
+<!-- <form class="form-inline my-2 my-lg-0" action="/review" method="post">
+    <input class="form-control mr-sm-2" type="search" placeholder="Search" name="search" aria-label="Search">
+    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+  </form> -->
+{% endblock %}

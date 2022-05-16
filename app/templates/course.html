@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block title %} Home Page {% endblock %}
+
+
+{% block content %} 
+
+
+    <div class="row justify-content-between">
+      <div class="col-2">
+        <h2>{{cID}}</h3>
+        <h5>Found {{rvs|length}} reviews</h5>
+        <p></p>
+        <form action="/course/{{cID}}" method="post">
+            <label for="">Filters:</label>
+            <p></p>
+            <label for="firstName">Professor First Name</label>
+            <input type="text" class="form-control" id="firstName" placeholder="" name="firstName">
+
+            <label for="lastName">Professor Last Name</label>
+            <input type="text" class="form-control" id="lastName" placeholder="" name="lastName">
+
+            <label for="courseTerm">Course Term</label>
+            <input type="text" class="form-control" id="courseTerm" placeholder="" name="courseTerm">
+            
+            <label for="reviewStanding">Reviewer Standing</label>
+            <input type="text" class="form-control" id="reviewStanding" placeholder="" name="reviewStanding">
+
+            <label for="reviewerGrade">Reviewer Grade</label>
+            <input type="text" class="form-control" id="reviewerGrade" placeholder="" name="reviewerGrade">
+            
+            <br></br>
+            <label for="">Order By:</label>
+            <div class="form-check">    
+                <input class="form-check-input" type="checkbox" value="" id="difficulty" name="difficulty">
+                <label class="form-check-label" for="difficulty">
+                    Difficulty
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="usefulness" name="usefulness">
+                <label class="form-check-label" for="usefulness">
+                  Usefulness
+                </label>
+              </div>
+
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="avgHrs" name="avgHrs">
+                <label class="form-check-label" for="avgHrs">
+                  Average hours per week
+                </label>
+              </div>
+
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="maxHrs" name="maxHrs">
+                <label class="form-check-label" for="maxHrs">
+                    Maximum hours per week
+                </label>
+              </div>
+            
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="profRating" name="profRating">
+                <label class="form-check-label" for="profRating">
+                    Professor Rating
+                </label>
+              </div>
+
+              <p></p>
+            <button type="submit" class="btn btn-primary">Apply</button>
+        </form>
+      </div>
+      <div class="col-10">
+        {% for rv in rvs %}
+        <br></br>
+        <h4>{{rv["courseTerm"]}}: {{rv["firstName"]}} {{rv["lastName"]}}</h4>
+        <h5>Difficulty: {{rv["difficulty"]}}, Usefulness: {{rv["usefulness"]}}, Professor rating: {{rv["profRating"]}}</h5>
+        <h5>Hours per week: {{rv["avgHrs"]}} (average)   {{rv["maxHrs"]}} (maximum) </h5>
+        <p>"{{rv["courseComments"]}}"</p>
+        <h6>Author: {{rv[0]}} {{rv[1]}}, Standing: {{rv["reviewStanding"]}}, Grade: {{rv["reviewerGrade"]}}</h6>
+        {% endfor %}
+      </div>
+    </div>
+
+
+
+
+{% endblock %}

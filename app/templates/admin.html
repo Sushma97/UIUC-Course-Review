@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block title %} Home Page {% endblock %}
+
+{% block content %} 
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<h3>Welcome to Admin Page</h3>
+
+
+<form action="/19iSvnfeocgVoyjjYYR8MGJwBteHU-RJRGsw5kRi1xuk" method="post">
+  <label for="bad_word">Bad word to insert:</label><br>
+  <input type="text" id="bad_word" name="bad_word" placeholder="word"><br>
+  <input type="submit" name="submitBtn" value="Submit">
+</form> 
+
+
+<br></br>
+
+
+<form action="/19iSvnfeocgVoyjjYYR8MGJwBteHU-RJRGsw5kRi1xuk" method="post">
+    <label for="bad_word">Refresh offenses table:</label><br>
+    <input type="submit" name="submitBtn" value="Refresh Table">
+  </form> 
+
+
+  <h4 style="font-family:'Courier New', Courier, monospace;color:rgb(0, 0, 0)"><center>Professors with most offensive comments</center></h4>
+  <table class="table">
+      <thead>
+        <tr style="background-color: #ec664888;color:white">
+          <th scope="col">First Name</th>
+          <th scope="col">Last Name</th>
+          <th scope="col">Professor ID</th>
+          <th scope="col">Total Offensive Comments</th>
+   
+        </tr>
+      </thead>
+      <tbody>
+          {% for prof in mostOffendedProfs %}
+          <tr style="background-color: #ffffe09f;">
+              <!-- <th scope="row">1</th> -->
+              <td>{{prof["firstName"]}}</td>
+              <td>{{prof["lastName"]}}</td>
+              <td>{{prof["profID"]}}</td>
+              <td>{{prof["num_offensive"]}}</td>
+          </tr>
+          {% endfor %}
+      </tbody>
+    </table>
+<br>
+<h4 style="font-family:'Courier New', Courier, monospace;color:rgb(0, 0, 0)"><center>Student Offenses</center></h4>
+<table class="table">
+    <thead>
+      <tr style="background-color: #ec664888;color:white">
+        <th scope="col">Student UIN</th>
+        <th scope="col">First Name</th>
+        <th scope="col">Last Name</th>
+        <th scope="col">Offenses</th>
+        <th scope="col">Total Reviews Made</th>
+
+      </tr>
+    </thead>
+    <tbody>
+        {% for student in otb %}
+        <tr style="background-color: #ffffe09f;">
+            <!-- <th scope="row">1</th> -->
+            <td>{{student["student_UIN"]}}</td>
+            <td>{{student["firstName"]}}</td>
+            <td>{{student["lastName"]}}</td>
+            <td>{{student["num_offensive"]}}</td>
+            <td>{{student["num_classes_reviewed"]}}</td>
+            <!-- <td>{{'%.2f'|format(student["num_offensive"])}}</td>
+            <td>{{'%.2f'|format(student["num_classes_reviewed"])}}</td> -->
+        </tr>
+        {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

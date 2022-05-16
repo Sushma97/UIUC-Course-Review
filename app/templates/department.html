@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %} Home Page {% endblock %}
+
+{% block content %} 
+<h2>Welcome to the {{deptName}} page</h2>
+<h5>Found {{rvs|length}} courses</h5>
+
+<!-- show aggregate info about entire dept here -->
+<br></br>
+<h3>Aggregate Department Information</h3>
+<h5>Difficulty: {{'%.2f'|format(aggInfo["avgDifficulty"])}}, Usefulness: {{'%.2f'|format(aggInfo["avgUsefulness"])}}</h5>
+<h5>Hours per week: {{'%.2f'|format(aggInfo["avgAvgHrs"])}} (average)  {{'%.2f'|format(aggInfo["avgMaxHrs"])}} (maximum) </h5>
+<br></br>
+
+<h3>Courses</h3>
+{% for rv in rvs %}
+
+<h5>{{rv["courseID"]}} {{rv["title"]}}</h5>
+<h6>Difficulty: {{'%.2f'|format(rv["avgDifficulty"])}}, Usefulness: {{'%.2f'|format(rv["avgUsefulness"])}}</h6>
+<h6>Hours per week: {{'%.2f'|format(rv["avgAvgHrs"])}} (average)  {{'%.2f'|format(rv["avgMaxHrs"])}} (maximum) </h6>
+<a href="/course/{{rv['courseID']}}">See Course Page</a>
+<br></br>
+
+{% endfor %}
+
+{% endblock %}

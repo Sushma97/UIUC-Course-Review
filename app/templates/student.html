@@ -1,0 +1,277 @@
+{% extends "base.html" %}
+{% block title %} Home Page {% endblock %}
+
+{% block content %} 
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<h3>Here are your reviews, {{firstName}}</h3>
+<h4>Found {{rvs|length}} reviews</h4>
+
+<style>
+.form-popup {
+    display: none;
+    position: fixed;
+        left: 45%;
+        top: 5%;
+        transform: translate(-50%, 5%);
+        border: 3px solid #999999;
+        z-index: 9;
+  }
+  .btn-block {
+  margin-top: 20px;
+  text-align: center;
+  }
+  .input-button {
+  width: 70px;
+  margin-top: 10px;
+  padding: 10px;
+  border: gray;
+  -webkit-border-radius: 5px; 
+  -moz-border-radius: 5px; 
+  border-radius: 5px; 
+  background-color: #095484;
+  font-size: 16px;
+  color: #fff;
+  cursor: pointer;
+  display: inline;
+  /* float: left; */
+
+  }
+  button:hover {
+  background-color: #0666a3;
+  }
+  @media (min-width: 568px) {
+  .title-block {
+  display: flex;
+  justify-content: space-between;
+  }
+  .title-block select {
+  width: 50%;
+  margin-bottom: 0;
+  }
+  .title-block input {
+  width: 50%;
+  margin-bottom: 0;
+  }
+  .txt-center {
+    text-align: center;
+}
+.hide {
+    display: none;
+}
+
+.clear {
+    float: none;
+    clear: both;
+}
+
+.rating {
+    width: 90px;
+    unicode-bidi: bidi-override;
+    direction: rtl;
+    text-align: center;
+    position: relative;
+}
+
+.rating > label {
+    float: right;
+    display: inline;
+    padding: 0;
+    margin: 0;
+    position: relative;
+    width: 1.1em;
+    cursor: pointer;
+    color: #000;
+}
+
+.rating > label:hover,
+.rating > label:hover ~ label,
+.rating > input.radio-btn:checked ~ label {
+    color: transparent;
+}
+
+.rating > label:hover:before,
+.rating > label:hover ~ label:before,
+/* .rating > input.radio-btn:checked ~ label:before, */
+.rating > input.radio-btn:checked ~ label:before {
+    content: "\2605";
+    position: absolute;
+    left: 0;
+    color: #FFD700;
+}
+  th, td {
+  word-break: keep-all;
+  }
+  }
+  * {
+        box-sizing: border-box;
+      }
+      .openBtn {
+        display: inline;
+        /* justify-content: space-between; */
+        position: relative;
+        /* display: flex;
+  justify-content: space-between; */
+        /* width: 50%; */
+      }
+      .openButton {
+        border: none;
+        border-radius: 5px;
+        background-color: #1c87c9;
+        color: white;
+        padding: 14px 20px;
+        cursor: pointer;
+        position: fixed;
+      }
+      .loginPopup {
+        position: relative;
+        text-align: center;
+        width: 100%;
+      }
+      /* .formPopup {
+        display: none;
+        position: fixed;
+        left: 45%;
+        top: 5%;
+        transform: translate(-50%, 5%);
+        border: 3px solid #999999;
+        z-index: 9;
+      } */
+      .formContainer {
+        max-width: 400px;
+        padding: 20px;
+        background-color: #fff;
+        height:600px;
+        overflow-y:auto;
+        text-align: left;
+      }
+      /* .formContainer input[type=text], */
+      .formContainer input{
+        width: 100%;
+        padding: 15px;
+        margin: 5px 0 15px 0;
+        border: 2px solid #999999;
+        /* height: 20px; */
+        /* background: #eee; */
+      }
+      /* .formContainer input[type=text]:focus, */
+      /* .formContainer input[type=password]:focus {
+        background-color: #ddd;
+        outline: none;
+      } */
+      .formContainer .btn {
+        padding: 12px 20px;
+        border: none;
+        background-color: #095484;
+        color: #fff;
+        cursor: pointer;
+        width: 100%;
+        margin-bottom: 15px;
+        opacity: 0.8;
+      }
+      .formContainer .cancel {
+        background-color: #cc0000;
+      }
+      .formContainer .btn:hover,
+      .openButton:hover {
+        opacity: 1;
+      }
+
+</style>
+{% for rv in rvs %}
+<br></br>
+<h4>{{rv["courseID"]}} {{rv["courseTerm"]}}: {{rv["firstName"]}} {{rv["lastName"]}}</h4>
+<h5>Difficulty: {{rv["difficulty"]}}, Usefulness: {{rv["usefulness"]}}, Professor rating: {{rv["profRating"]}}</h5>
+<h5>Hours per week: {{rv["avgHrs"]}} (average)   {{rv["maxHrs"]}} (maximum) </h5>
+<h6>Course comments:</h6>
+<p>"{{rv["courseComments"]}}"</p>
+<h6>Prof comments:</h6>
+<p>"{{rv["profComments"]}}"</p>
+<h6>Standing: {{rv["reviewStanding"]}}, Grade: {{rv["reviewerGrade"]}}</h6>
+<div class = "openBtn">
+<button class="input-button" onclick="openForm(event)" data-target="#form-{{rv['reviewID']}}">Edit</button>
+
+<div class="loginPopup">
+<div class="form-popup" id="form-{{rv['reviewID']}}">
+                    <form action="{{ url_for('editReview', reviewID=rv['reviewID']) }}" class="formContainer" method="POST">
+                        <h4>Grade obtained in the above course</h4>
+                        <input type="text" name="grade" value="{{rv['reviewerGrade']}}"/>
+                        <h4>Difficulty</h4>
+                        <input type="number" name="difficulty" value="{{rv['difficulty']}}" min='0' max="5" step="1.0"/>
+    <!-- <div class="rating" name="difficulty">
+      <input id="star5_d" name="stard" type="radio" value="5" class="radio-btn hide" />
+      <label for="star5_d">☆</label>
+      <input id="star4_d" name="stard" type="radio" value="4" class="radio-btn hide" />
+      <label for="star4_d">☆</label>
+      <input id="star3_d" name="stard" type="radio" value="3" class="radio-btn hide" />
+      <label for="star3_d">☆</label>
+      <input id="star2_d" name="stard" type="radio" value="2" class="radio-btn hide" />
+      <label for="star2_d">☆</label>
+      <input id="star1_d" name="stard" type="radio" value="1" class="radio-btn hide" />
+      <label for="star1_d">☆</label>
+      <div class="clear"></div>
+  </div> -->
+    <h4>Usefulness</h4>
+    <input type="number" name="usefulness" value="{{rv['usefulness']}}" min='0' max="5" step="1.0"/>
+    <!-- <div class="rating" name="usefulness">
+      <input id="star5_u" name="staru" type="radio" value="5" class="radio-btn hide" />
+      <label for="star5_u">☆</label>
+      <input id="star4_u" name="staru" type="radio" value="4" class="radio-btn hide" />
+      <label for="star4_u">☆</label>
+      <input id="star3_u" name="staru" type="radio" value="3" class="radio-btn hide" />
+      <label for="star3_u">☆</label>
+      <input id="star2_u" name="staru" type="radio" value="2" class="radio-btn hide" />
+      <label for="star_u">☆</label>
+      <input id="star1_u" name="staru" type="radio" value="1" class="radio-btn hide" />
+      <label for="star1_u">☆</label>
+      <div class="clear"></div>
+  </div> -->
+    <h4>Professor Rating</h4>
+    <input type="number" name="profRating" value="{{rv['profRating']}}" min='0' max="5" step="1.0"/>
+          <!-- <div class="rating" name="profRating">
+              <input id="star5_p" name="starp" type="radio" value="5" class="radio-btn hide" />
+              <label for="star5_p">☆</label>
+              <input id="star4_p" name="starp" type="radio" value="4" class="radio-btn hide" />
+              <label for="star4_p">☆</label>
+              <input id="star3_p" name="starp" type="radio" value="3" class="radio-btn hide" />
+              <label for="star3_p">☆</label>
+              <input id="star2_p" name="starp" type="radio" value="2" class="radio-btn hide" />
+              <label for="star2_p">☆</label>
+              <input id="star1_p" name="starp" type="radio" value="1" class="radio-btn hide" />
+              <label for="star1_p">☆</label>
+              <div class="clear"></div>
+          </div> -->
+    <h4>Average hours spent</h4>
+    <input type="number" name="avgHours" value="{{rv['avgHrs']}}"/>
+    <h4>Maximum hours spent</h4>
+    <input type="number" name="maxHours" value="{{rv['maxHrs']}}"/>
+    <h4>Comments about the Course</h4>
+    <textarea style="width: 100%; max-width: 100%;" rows="5" name="courseComments">{{rv['courseComments']}}</textarea>  
+    <h4>Comments about the Professor</h4>
+    <textarea style="width: 100%; max-width: 100%;" rows="5" name="profComments">{{rv['profComments']}}</textarea>
+                       <!-- <label for="Task_edit"><b>Edit task</b></label>
+                        <input type="text" value="{{ rv['courseComments'] }}" name="Task_edit" required> -->
+                        <button type="submit" class="btn">Edit</button>
+                        <button type="button" onclick="closeForm(event)" data-dismiss=".form-popup" class="btn cancel">Close</button>
+                    </form>
+                </div>
+            </div>
+<script type="text/javascript">
+function openForm(event) {
+  const target = event.target.dataset.target;
+  const elem = document.querySelector(target);
+  elem && (elem.style.display = 'inline');
+}
+
+function closeForm(event) {
+  const target = event.target.dataset.dismiss;
+  const elem = event.target.closest(target);
+  elem && (elem.style.display = 'none');
+}
+</script>
+<a href="/delete/{{rv['reviewID']}}">
+    <button class="input-button" type="button">Delete</button>
+</a>
+</div>
+{% endfor %}
+
+{% endblock %}

@@ -1,0 +1,200 @@
+{% extends "base.html" %}
+{% block title %} Home Page {% endblock %}
+
+{% block content %} 
+<style>
+    html, body {
+  width: 100%;
+  height:100%;
+}
+
+body {
+    background: linear-gradient(-45deg, #E84A27 , #0455A4, #E84A27 , #0455A4);
+    background-size: 500% 500%;
+    animation: gradient 15s ease infinite;
+}
+
+@keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+
+}
+</style>
+<body>
+<!--First section-->
+  <div style="background-image: url('https://admissions.illinois.edu/Content/images/visit-virtual-visits.jpg'); 
+  background-size: cover;  padding-top:80px;height:400px;vertical-align:middle">
+  <h1 style="color:white;font-family: 'Brush Script MT', cursive"><center>UIUC Course Review!</center></h1>
+  <h3 style="color:orangered;font-family: 'Brush Script MT', cursive"><center>Made with Flask</center></h3> <br>
+  <center><img src="https://logos-world.net/wp-content/uploads/2020/07/Illinois-Fighting-Illini-Logo.png" alt="centered image" height="100" width="180"> </center>
+  </div>
+</body>
+<br>
+<br>
+<br>
+<h2 style="color:black;font-family: 'Brush Script MT', cursive"><center>Review Statistics</center></h2>
+
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Float four columns side by side */
+.column {
+  float: left;
+  width: 20%;
+  padding: 10px 5px;
+}
+
+/* Remove extra left and right margins, due to padding */
+.row {margin: 0 -5px;}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Responsive columns */
+@media screen and (max-width: 1175px) {
+  .column {
+    width: 100%;
+    display: block;
+    margin-bottom: 15px;
+  }
+}
+
+/* Style the counter cards */
+.card {
+    border-radius: 25px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  padding: 30px;
+  color:aliceblue;
+  font-family: 'Trebuchet MS';
+  text-align: center;
+  /* background-color: #3a4eff; */
+  background: rgb(19,41,75);
+  background: linear-gradient(315deg, rgba(5,86,165,1) 0%,rgba(232,233,234,1), 50%, rgba(232,74,39,1) 100%);
+  animation: gradient 15s ease infinite;
+}
+</style>
+</head>
+<body>
+
+
+
+<div class="row">
+    {% for rv in dbData %}
+        <div class="column">
+            <div class="card">
+            <h3>{{rv.0}}</h3>
+            <p>{{rv.1}}</p>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+</body>
+</html>
+<br></br>
+<br></br>
+<h4 style="font-family:'Courier New', Courier, monospace;color:white"><center>Least time consuming departments</center></h4>
+<table class="table">
+    <thead>
+      <tr style="background-color: #ec664888;color:white">
+        <th scope="col">Department Name</th>
+        <th scope="col">Average Hours (per week per course)</th>
+        <th scope="col">Max Hours (per week per course)</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for dept in lCon %}
+        <tr style="background-color: #ffffe09f;">
+            <!-- <th scope="row">1</th> -->
+            <td>{{dept["deptName"]}}</td>
+            <td>{{'%.2f'|format(dept["avgHrs"])}}</td>
+            <td>{{'%.2f'|format(dept["maxHrs"])}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+  </table>
+
+
+<!-- Show most time consuming depts here -->
+<br></br>
+<br></br>
+<h4 style="font-family:'Courier New', Courier, monospace;color:white"><center>Most time consuming departments</center></h4>
+<table class="table">
+    <thead>
+      <tr style="background-color: #ec664888;color:white">
+        <th scope="col">Department Name</th>
+        <th scope="col">Average Hours (per week per course)</th>
+        <th scope="col">Max Hours (per week per course)</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for dept in mCon %}
+        <tr style="background-color: #ffffe09f;">
+            <!-- <th scope="row">1</th> -->
+            <td>{{dept["deptName"]}}</td>
+            <td>{{'%.2f'|format(dept["avgHrs"])}}</td>
+            <td>{{'%.2f'|format(dept["maxHrs"])}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+  </table>
+<!-- Show highest ranked profs here -->
+<br></br>
+<br></br>
+<h4 style="font-family:'Courier New', Courier, monospace;color:white"><center>Top Rated Professors</center></h4>
+<table class="table">
+    <thead>
+    <tr style="background-color: #ec664888;color:white">
+        <th scope="col">First Name</th>
+        <th scope="col">Last Name</th>
+        <th scope="col">Department</th>
+        <th scope="col">Average Rating</th>
+    </tr>
+    </thead>
+    <tbody>
+        {% for prof in topProfs %}
+        <tr style="background-color: #ffffe09f;">
+            <td>{{prof["firstName"]}}</td>
+            <td>{{prof["lastName"]}}</td>
+            <td>{{prof["deptName"]}}</td>
+            <td>{{'%.2f'|format(prof["avgRating"])}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<style>.site-footer {
+    background: orange;
+  }
+  
+  #footer-content {
+    background: rgb(141, 141, 141);
+  }</style>
+<footer class="site-footer">
+    <div id="footer-content">
+      <span style="font-family:'Courier New', Courier, monospace;float:left">2021-2022 @ UIUC Course Review - All Rights Reserved</span>
+        <span style="font-family:'Courier New', Courier, monospace;float:right"></spanstyle> Made by: Team Losers!</span>  
+    </div>
+  </footer>
+{% endblock %}
